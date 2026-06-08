@@ -31,7 +31,7 @@ Run the prerequisites script from repo root and parse JSON for `FEATURE_DIR`. Lo
 
 Required gates: `verify`, `security`, `review`, `docs`.
 
-For each, read `FEATURE_DIR/gates/<gate>.json` and check:
+For each required gate, read `FEATURE_DIR/gates/<gate>.json` and check:
 - `schema_version` exists
 - `status` is `passed`, `warning`, `blocked`, `not-applicable`, or `not-run`
 - `blocking` is consistent with status
@@ -43,6 +43,8 @@ Decision:
 - `warning` → show details, ask user to accept
 - `not-applicable` → allow if justification exists
 - `passed` → allow
+
+Additional gates (auto-detected): if `FEATURE_DIR/gates/workspace.json` exists, validate it with the same rules. When missing, skip silently — it is an optional gate provided by the `dm-workspace` extension. A `blocked` workspace gate blocks promotion even if required gates pass.
 
 Never decide based on Markdown file existence alone.
 

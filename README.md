@@ -1,9 +1,11 @@
-# Spec Kit DM Guards
+# Spec Kit - DM Guards
 
 Self-contained extension for the Spec Kit development flow (Specification-Driven Development). Complements the official GitHub Spec Kit with verification, independent review, security, documentation, promotion, status, and retrospective gates.
 
 **Version**: 1.0.0
+
 **Author**: DM Tecnologia
+
 **Compatibility**: Requires a Spec Kit initialized project (`.specify/`) and an agent supported by `specify integration`
 
 > **Português**: See [README.pt.md](README.pt.md)
@@ -19,7 +21,6 @@ spec-kit-dm-guards/
 ├── LICENSE
 ├── extension.yml
 ├── config-template.yml
-├── FINDINGS.md
 ├── gate-status-schema.md
 ├── speckit-flow.md
 ├── speckit-flow.pt.md
@@ -90,7 +91,7 @@ GOVERNANCE
 | `/speckit.dm-guard.status` | Lifecycle dashboard per feature, phase, gate, and blocker. |
 | `/speckit.dm-guard.retro` | Captures lessons learned, architecture decisions, and constitution proposals. |
 
-### Quality Of Life
+### Quality
 
 | Command | Purpose |
 |---------|---------|

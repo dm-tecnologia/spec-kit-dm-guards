@@ -73,19 +73,22 @@ Gate decision:
 - `not-applicable` → allow only if justification/evidence exists.
 - `passed` → allow.
 
+**Optional auto-detected gates:** After checking required gates, scan for additional gate JSON files that are not in the required list. If `FEATURE_DIR/gates/workspace.json` exists (from the `dm-workspace` extension), validate it with the same rules. When missing, skip silently — these are optional gates that only apply when their extension is installed. A `blocked` optional gate still blocks promotion.
+
 Do not decide based on the existence of `verify.md`, `review.md`, `docs-check.md`, or `security.md` alone.
 
 ### Step 3 — Build Gate Summary
 
-Display:
+Display all gates (required + any auto-detected optional gates):
 
 ```text
-| Gate | Status | Blocking | Critical | High | Medium | Low | Artifact |
-|------|--------|----------|----------|------|--------|-----|----------|
-| verify | passed | false | 0 | 0 | 1 | 0 | verify.md |
-| security | not-applicable | false | 0 | 0 | 0 | 0 | checklists/security.md |
-| review | passed | false | 0 | 0 | 0 | 2 | review.md |
-| docs | warning | false | 0 | 0 | 1 | 0 | docs-check.md |
+| Gate | Status | Blocking | Critical | High | Medium | Low | Artifact | Required |
+|------|--------|----------|----------|------|--------|-----|----------|----------|
+| verify | passed | false | 0 | 0 | 1 | 0 | verify.md | yes |
+| security | not-applicable | false | 0 | 0 | 0 | 0 | checklists/security.md | yes |
+| review | passed | false | 0 | 0 | 0 | 2 | review.md | yes |
+| docs | warning | false | 0 | 0 | 1 | 0 | docs-check.md | yes |
+| workspace | passed | false | 0 | 0 | 0 | 0 | workspace/state.json | optional |
 ```
 
 If any warning or not-applicable gate exists, show the summary and ask:

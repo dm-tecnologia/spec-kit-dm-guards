@@ -1,9 +1,11 @@
-# Spec Kit Skills — Agent Gates
+# Spec Kit - DM Guards
 
 Extensão autocontida para o fluxo de desenvolvimento Spec Kit (Specification-Driven Development). Complementa o Spec Kit oficial do GitHub com gates de verificação, revisão independente, segurança, documentação, promoção, status e retrospectiva.
 
 **Versão**: 1.0.0
+
 **Autor**: DM Tecnologia
+
 **Compatibilidade**: Requer projeto inicializado com Spec Kit (`.specify/`) e um agente suportado por `specify integration`
 
 > **English**: See [README.md](README.md)
@@ -19,7 +21,6 @@ spec-kit-dm-guards/
 ├── LICENSE
 ├── extension.yml
 ├── config-template.yml
-├── FINDINGS.md
 ├── gate-status-schema.md
 ├── speckit-flow.md
 ├── speckit-flow.pt.md
@@ -90,7 +91,7 @@ GOVERNANCE
 | `/speckit.dm-guard.status` | Dashboard de lifecycle por feature, fase, gate e blocker. |
 | `/speckit.dm-guard.retro` | Captura lições aprendidas, decisões arquiteturais e propostas de constitution. |
 
-### Qualidade De Vida
+### Qualidade
 
 | Comando | O que faz |
 |---------|-----------|

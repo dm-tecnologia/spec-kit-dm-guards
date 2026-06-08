@@ -13,6 +13,7 @@ gates:
   promote: mandatory
   retro: optional
   status: optional
+  workspace: optional
 
 # Minimum severity that blocks promotion (critical, high, medium, low).
 # Default: high (critical always blocks).
