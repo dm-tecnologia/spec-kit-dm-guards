@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feature Status Dashboard</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a2e;
+    --border: #e2e8f0;
+    --row-hover: #f1f5f9;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --gray: #94a3b8;
+    --blue: #3b82f6;
+    --muted: #64748b;
+    --card-bg: #f8fafc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --fg: #e2e8f0;
+      --border: #334155;
+      --row-hover: #1e293b;
+      --green: #34d399;
+      --yellow: #fbbf24;
+      --red: #f87171;
+      --gray: #64748b;
+      --blue: #60a5fa;
+      --muted: #94a3b8;
+      --card-bg: #1e293b;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    padding: 24px;
+    line-height: 1.5;
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.875rem; margin-bottom: 24px; }
+  .summary-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    flex: 1;
+    min-width: 140px;
+  }
+  .card .num { font-size: 1.75rem; font-weight: 700; }
+  .card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  .num-green { color: var(--green); }
+  .num-yellow { color: var(--yellow); }
+  .num-red { color: var(--red); }
+  .num-gray { color: var(--gray); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    margin-bottom: 24px;
+  }
+  th {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+  }
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:hover { background: var(--row-hover); }
+  .center { text-align: center; }
+  .badge {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+  .badge-green { background: var(--green); color: #fff; }
+  .badge-yellow { background: var(--yellow); color: #000; }
+  .badge-red { background: var(--red); color: #fff; }
+  .badge-gray { background: var(--gray); color: #fff; }
+  .badge-blue { background: var(--blue); color: #fff; }
+  .progress-wrap {
+    background: var(--border);
+    border-radius: 4px;
+    height: 6px;
+    width: 100%;
+    min-width: 60px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .detail-row { display: none; }
+  .detail-row.open { display: table-row; }
+  .expand-btn {
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .expand-btn:hover { background: var(--row-hover); }
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .gate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 8px 0; }
+  .gate-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+  .gate-item .gate-label { font-weight: 600; margin-bottom: 2px; }
+  .gate-item .gate-status { font-size: 0.6875rem; }
+  .rec-list { list-style: none; padding: 0; }
+  .rec-list li {
+    padding: 4px 0;
+    font-size: 0.8125rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .rec-list li:last-child { border-bottom: none; }
+  .rec-tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-right: 6px;
+  }
+  .ts { font-size: 0.75rem; color: var(--muted); margin-top: 24px; }
+  @media (max-width: 768px) {
+    table { font-size: 0.7rem; }
+    td, th { padding: 4px 6px; }
+  }
+</style>
+</head>
+<body>
+<h1>Feature Status Dashboard</h1>
+<div class="subtitle">Last updated: __GENERATED_AT__ &middot; __FEATURE_COUNT__ features scanned</div>
+
+__SUMMARY_CARDS__
+
+__ATTENTION_SECTION__
+
+<div class="section-title">All Features</div>
+<table>
+<thead>
+<tr>
+  <th>#</th>
+  <th>Feature</th>
+  <th>Spec</th>
+  <th>Clarif</th>
+  <th>Plan</th>
+  <th>Tasks</th>
+  <th>Progress</th>
+  <th>Verify</th>
+  <th>Security</th>
+  <th>Review</th>
+  <th>Docs</th>
+  <th>Promote</th>
+  <th>Detail</th>
+</tr>
+</thead>
+<tbody id="table-body">
+</tbody>
+</table>
+
+<div class="section-title">Recommendations</div>
+<ul class="rec-list" id="rec-list">
+__RECOMMENDATIONS__
+</ul>
+
+<div class="ts">Generated by speckit.dm-guard.status</div>
+
+<script>
+// __FEATURES_JSON__
+const features = __FEATURES_JSON_PLACEHOLDER__;
+
+const GATE_KEYS = ['verify', 'security', 'review', 'docs', 'promote'];
+
+function badge(text, type) {
+  return `<span class="badge badge-${type}">${text}</span>`;
+}
+
+function gateLabel(g) {
+  if (!g || g === 'not-run' || g === '') return badge('—','gray');
+  if (g === 'passed')                    return badge('OK','green');
+  if (g === 'warning')                   return badge('WARN','yellow');
+  if (g === 'blocked')                   return badge('BLOCK','red');
+  if (g === 'not-applicable')            return badge('N/A','blue');
+  return badge(g,'gray');
+}
+
+function gateBorder(g) {
+  if (g === 'blocked') return 'var(--red)';
+  if (g === 'warning') return 'var(--yellow)';
+  if (g === 'passed')  return 'var(--green)';
+  return 'var(--gray)';
+}
+
+function progressBar(done, total) {
+  if (total === 0) return `<div class="progress-wrap"><div class="progress-fill" style="width:0%;background:var(--gray);"></div></div>`;
+  const pct = Math.round(done/total*100);
+  const color = pct === 100 ? 'var(--green)' : pct >= 90 ? 'var(--yellow)' : 'var(--red)';
+  return `<div class="progress-wrap"><div class="progress-fill" style="width:${pct}%;background:${color};"></div></div>`;
+}
+
+function boolBadge(v) {
+  return v ? badge('YES','green') : badge('—','gray');
+}
+
+function pctText(done, total) {
+  if (total === 0) return '—';
+  return `${done}/${total}`;
+}
+
+function render() {
+  const tbody = document.getElementById('table-body');
+  features.forEach(f => {
+    const pct = f.total > 0 ? Math.round(f.done/f.total*100) : 0;
+    const pctClass = pct === 100 ? 'num-green' : pct >= 90 ? 'num-yellow' : 'num-red';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${f.num}</td>
+      <td><strong>${f.key}</strong></td>
+      <td class="center">${boolBadge(f.spec)}</td>
+      <td class="center">${boolBadge(f.clarif)}</td>
+      <td class="center">${boolBadge(f.plan)}</td>
+      <td class="center">${pctText(f.done, f.total)}</td>
+      <td style="min-width:100px;">
+        ${progressBar(f.done, f.total)}
+        <div style="font-size:0.625rem;margin-top:2px;"><span class="${pctClass}">${pct}%</span></div>
+      </td>
+      ${GATE_KEYS.map(k => `<td class="center">${gateLabel(f.gates && f.gates[k] ? f.gates[k].status : '')}</td>`).join('')}
+      <td class="center"><button class="expand-btn" data-num="${f.num}">+</button></td>
+    `;
+    tbody.appendChild(tr);
+
+    const detail = document.createElement('tr');
+    detail.className = 'detail-row';
+    detail.id = `detail-${f.num}`;
+    let detailHTML = '<td colspan="13"><div style="display:flex;flex-wrap:wrap;gap:12px;">';
+
+    if (f.gates) {
+      const anyGate = GATE_KEYS.some(k => f.gates[k]);
+      if (anyGate) {
+        GATE_KEYS.forEach(k => {
+          const g = f.gates[k];
+          if (!g) return;
+          const b = gateBorder(g.status);
+          detailHTML += `
+            <div class="gate-item" style="border-left:3px solid ${b};">
+              <div class="gate-label">${k}.json</div>
+              <div class="gate-status">Status: ${g.status} | Blocking: ${g.blocking} | ${g.summary || ''}</div>
+              <div class="gate-status" style="margin-top:2px;">C:${g.critical || 0} H:${g.high || 0} M:${g.medium || 0} L:${g.low || 0}</div>
+            </div>
+          `;
+        });
+      } else if (f.total > 0 && f.done < f.total) {
+        detailHTML += `<div style="color:var(--yellow);font-size:0.75rem;">Incomplete: ${f.total - f.done} task(s) remaining</div>`;
+      } else if (f.total === 0) {
+        detailHTML += `<div style="color:var(--red);font-size:0.75rem;">No artifacts — feature directory is empty</div>`;
+      } else {
+        detailHTML += `<div style="color:var(--green);font-size:0.75rem;">All tasks complete. No gate results.</div>`;
+      }
+    } else {
+      if (f.total > 0 && f.done < f.total) {
+        detailHTML += `<div style="color:var(--yellow);font-size:0.75rem;">Incomplete: ${f.total - f.done} task(s) remaining</div>`;
+      } else if (f.total === 0) {
+        detailHTML += `<div style="color:var(--red);font-size:0.75rem;">No artifacts — directory is empty</div>`;
+      } else {
+        detailHTML += `<div style="color:var(--green);font-size:0.75rem;">All tasks complete. No gate results.</div>`;
+      }
+    }
+
+    detailHTML += '</div></td>';
+    detail.innerHTML = detailHTML;
+    tbody.appendChild(detail);
+  });
+
+  document.querySelectorAll('.expand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const num = btn.dataset.num;
+      const row = document.getElementById(`detail-${num}`);
+      row.classList.toggle('open');
+      btn.textContent = row.classList.contains('open') ? '−' : '+';
+    });
+  });
+}
+
+render();
+</script>
+</body>
+</html>

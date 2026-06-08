@@ -1,0 +1,69 @@
+schema_version: "1.0"
+
+extension:
+  id: "dm-guard"
+  name: "Spec Kit Skills — DM Guard Gates"
+  version: "1.0.0"
+  description: "Post-implementation verification, security, code review, documentation, promotion, status, and retrospective gates for the Spec Kit SDD flow."
+  author: "DM Tecnologia"
+  repository: "https://github.com/dm-tecnologia/spec-kit-dm-guards"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=0.8.0"
+
+provides:
+  commands:
+    - name: "speckit.dm-guard.verify"
+      file: "commands/speckit.dm-guard.verify.md"
+      description: "Cross-reference spec tasks against actual code to detect gaps and architecture drift."
+    - name: "speckit.dm-guard.security"
+      file: "commands/speckit.dm-guard.security.md"
+      description: "OWASP coverage and secrets scan for the active feature."
+    - name: "speckit.dm-guard.review"
+      file: "commands/speckit.dm-guard.review.md"
+      description: "Static security scan, quality checks, and independent code review on feature diff."
+    - name: "speckit.dm-guard.docs"
+      file: "commands/speckit.dm-guard.docs.md"
+      description: "Verify that docs, contracts, context files, env examples, and i18n are in sync with code."
+    - name: "speckit.dm-guard.promote"
+      file: "commands/speckit.dm-guard.promote.md"
+      description: "Validate structured gate status, generate conventional commit, ask permission per Git action, and open a PR."
+    - name: "speckit.dm-guard.status"
+      file: "commands/speckit.dm-guard.status.md"
+      description: "Feature lifecycle dashboard across all in-flight features."
+    - name: "speckit.dm-guard.retro"
+      file: "commands/speckit.dm-guard.retro.md"
+      description: "Post-delivery retrospective: capture learnings, decisions, and constitution proposals."
+
+tags:
+  - "verification"
+  - "code-review"
+  - "security"
+  - "delivery"
+  - "governance"
+
+hooks:
+  after_implement:
+    command: "speckit.dm-guard.verify"
+    description: "Run spec verification after implementation"
+    optional: true
+  after_verify:
+    command: "speckit.dm-guard.security"
+    description: "Run security gate after verification"
+    optional: true
+  after_security:
+    command: "speckit.dm-guard.review"
+    description: "Run code review after security gate"
+    optional: true
+  after_review:
+    command: "speckit.dm-guard.docs"
+    description: "Run documentation check after review"
+    optional: true
+  after_docs:
+    command: "speckit.dm-guard.promote"
+    description: "Promote feature after all gates pass"
+    optional: true
+
+config:
+  template: "config-template.yml"

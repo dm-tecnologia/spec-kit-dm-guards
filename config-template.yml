@@ -1,0 +1,54 @@
+# Spec Kit DM Guards — Configuration Template
+#
+# Copy to config.yml and adjust for your project.
+# Commands read this file when it exists; leave fields empty to use defaults.
+
+gates:
+  # Gate policy per gate: mandatory, optional, or disabled.
+  # When mandatory and missing/blocked, promote will stop.
+  verify: mandatory
+  security: mandatory
+  review: mandatory
+  docs: mandatory
+  promote: mandatory
+  retro: optional
+  status: optional
+
+# Minimum severity that blocks promotion (critical, high, medium, low).
+# Default: high (critical always blocks).
+blocking_severity: high
+
+# Documentation targets to check (/speckit.dm-guard.docs).
+# Empty or absent = auto-detect from project structure.
+docs:
+  context_files:
+    - "AGENTS.md"
+  openapi_paths:
+    - "apps/api/openapi.yaml"
+  env_example_paths:
+    - ".env.example"
+  i18n_locales:
+    - "pt-BR"
+    - "en-US"
+  readme_path: "README.md"
+  architecture_docs: []
+
+# Security scan configuration (/speckit.dm-guard.security).
+security:
+  owasp_version: "2021"
+  pre_plan_mode: false
+
+# Review configuration (/speckit.dm-guard.review).
+review:
+  diff_algorithm: auto
+  base_branch: ""
+
+# Promotion configuration (/speckit.dm-guard.promote).
+promote:
+  base_branch: ""
+  create_pr: true
+  auto_push: false
+
+# Thresholds for /speckit.dm-guard.verify.
+verify:
+  max_missing_tasks_percent: 10
